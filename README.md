@@ -19,3 +19,22 @@ Activamos el entorno
 ```bash
 conda activate coin-detecion-amount
 ```
+Instalar requiremets
+```bash
+pip install -r requirements.txt
+```
+## Ejecucion
+### Uvicorn
+Levantar el api con uvicorn
+```bash
+uvicorn app.main:app --reload
+```
+Acceder al swagger para probar
+```bash
+http://127.0.0.1:8000/docs#/
+```
+### Docker
+```bash
+sudo docker-compose build
+sudo docker-compose up -d
+```
