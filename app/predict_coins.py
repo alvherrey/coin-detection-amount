@@ -8,9 +8,9 @@ def detect_coins(input_img):
     max_r = 300
 
     # preprocessing the input image
-    cv2.imwrite("input/euro.jpg", input_img)
+    cv2.imwrite("euro.jpg", input_img)
 
-    coins = cv2.imread('input/euro.jpg',0)
+    coins = cv2.imread('euro.jpg',0)
 
     img = cv2.medianBlur(coins,5)
 
@@ -59,7 +59,7 @@ def detect_coins(input_img):
             4,
         )
         cv2.putText(coins_detected,'radio: {}'.format(detected_radius),(x_coor -120,y_coor),cv2.FONT_HERSHEY_SIMPLEX,2,(0, 0, 0), 4)
-    cv2.imwrite("output/euro_radio.jpg", coins_detected)
+    cv2.imwrite("euro_radio.jpg", coins_detected)
 
     # return circles
     return circles
@@ -181,7 +181,7 @@ def calculate_amount(input_img):
     tolerance = 0.035
     total_amount = 0
 
-    coins_circled = cv2.imread('output/euro_radio.jpg', 1)
+    coins_circled = cv2.imread('euro_radio.jpg', 1)
     font = cv2.FONT_HERSHEY_SIMPLEX
 
     for coin in circles[0]:
@@ -196,7 +196,7 @@ def calculate_amount(input_img):
                 cv2.putText(coins_circled, 'valor: {}'.format(value), (int(coor_x) -120 , int(coor_y)+ 100), font, 2,
                             (0, 0, 255), 4)
 
-    cv2.imwrite("output/euro_valor.jpg", coins_circled)
+    cv2.imwrite("euro_valor.jpg", coins_circled)
     
     # return monedas result map
     return monedas
