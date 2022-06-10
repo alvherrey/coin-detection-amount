@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  coin-detection:
+    image: coin-detection
+    container_name: coin-detection
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TZ=Europe/Madrid
+    restart: unless-stopped
+    ports:
+      - 8002:8002
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
