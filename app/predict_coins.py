@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import base64
 
 def detect_coins(input_img):
 
@@ -39,9 +40,9 @@ def detect_coins(input_img):
         img,                    # source image
         cv2.HOUGH_GRADIENT,     # type of detection
         1,                      # always 1
-        300,                    # min distance between centers
-        param1=150,              # adjust 1
-        param2=45,             # adjust 2
+        250,                    # min distance between centers
+        param1=130,              # adjust 1
+        param2=60,             # adjust 2
         minRadius=min_r,        # minimal radius
         maxRadius=max_r,        # max radius
     )
@@ -184,20 +185,30 @@ def calculate_amount(input_img):
     coins_circled = cv2.imread('euro_radio.jpg', 1)
     font = cv2.FONT_HERSHEY_SIMPLEX
 
+    # comprobacion de los ratios
     for coin in circles[0]:
         ratio_to_check = coin[2] / smallest
         coor_x = coin[0]
         coor_y = coin[1]
-        for euro in monedas:
-            value = monedas[euro]['value']
-            if abs(ratio_to_check - monedas[euro]['ratio']) <= tolerance:
-                monedas[euro]['count'] += 1
-                total_amount += monedas[euro]['value']
+        for moneda in monedas:
+            value = monedas[moneda]['value']
+            if abs(ratio_to_check - monedas[moneda]['ratio']) <= tolerance:
+                monedas[moneda]['count'] += 1
+                total_amount += monedas[moneda]['value']
                 cv2.putText(coins_circled, 'valor: {}'.format(value), (int(coor_x) -120 , int(coor_y)+ 100), font, 2,
                             (0, 0, 255), 4)
 
+    # Guardar imagen del resultado
     cv2.imwrite("euro_valor.jpg", coins_circled)
-    
+
+    # encode a b64 de la imagen resultado
+    with open("euro_valor.jpg", "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+
+    # Añadir total amount y imagen al diccionario monedas
+    monedas['total_amount'] = total_amount
+    monedas['encoded_image'] = encoded_string
+
     # return monedas result map
     return monedas
 
