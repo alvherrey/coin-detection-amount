@@ -11,53 +11,10 @@ def detect_coins(input_img):
 
     # preprocessing the input image
     cv2.imwrite("euro.jpg", input_img)
-
     coins = cv2.imread('euro.jpg',0)
-
-    # print('coins:')
-    # print('--------')
-    # print(coins.dtype)
-    # print(type(coins))
-    # print(np.shape(coins))
-    # print()
-
     img = coins.copy()
 
-    # img = cv2.medianBlur(coins,5)
-
-    # get hough circles
-    # circles = cv2.HoughCircles(
-    #     img,                    # source image
-    #     cv2.HOUGH_GRADIENT,     # type of detection
-    #     1,                      # always 1
-    #     300,                    # min distance between centers
-    #     param1=35,              # adjust 1
-    #     param2=80,             # adjust 2
-    #     minRadius=min_r,        # minimal radius
-    #     maxRadius=max_r,        # max radius
-    # )
-    # circles = cv2.HoughCircles(
-    #     img,                    # source image
-    #     cv2.HOUGH_GRADIENT,     # type of detection
-    #     1,                      # always 1
-    #     300,                    # min distance between centers
-    #     param1=100,              # adjust 1
-    #     param2=50,             # adjust 2
-    #     minRadius=min_r,        # minimal radius
-    #     maxRadius=max_r,        # max radius
-    # )
-    
-    # circles = cv2.HoughCircles(
-    #     img,                    # source image
-    #     cv2.HOUGH_GRADIENT,     # type of detection
-    #     1,                      # always 1
-    #     300,                    # min distance between centers
-    #     param1=130,              # adjust 1
-    #     param2=60,             # adjust 2
-    #     minRadius=min_r,        # minimal radius
-    #     maxRadius=max_r,        # max radius
-    # )
-
+    # get circles
     circles = cv2.HoughCircles(
         img,                                # source image
         cv2.HOUGH_GRADIENT,                 # type of detection
@@ -68,26 +25,10 @@ def detect_coins(input_img):
         minRadius=min_r,                    # minimal radius
         maxRadius=max_r,                    # max radius
     )
-
     if circles is None:
         print('es nulo')
         return
-    
-    # print('circles:')
-    # print('--------')
-    # print(circles.dtype)
-    # print(type(circles))
-    # print(np.shape(circles))
-    # print()
-
     circles = np.uint16(np.round(circles))
-
-    # print('circles:')
-    # print('--------')
-    # print(circles.dtype)
-    # print(type(circles))
-    # print(np.shape(circles))
-    # print()
 
     # write radios to image
     coins_copy = coins.copy()
@@ -109,102 +50,52 @@ def detect_coins(input_img):
 def calculate_amount(input_img):
 
     # monedas initial map
-    # monedas = {
-    #     "1 C": {
-    #         "value": 1,
-    #         "radius": 16.26,
-    #         "ratio": 1,
-    #         "count": 0,
-    #     },
-    #     "2 C": {
-    #         "value": 2,
-    #         "radius": 18.75,
-    #         "ratio": 1.153,
-    #         "count": 0,
-    #     },
-    #     "5 C": {
-    #         "value": 5,
-    #         "radius": 21.25,
-    #         "ratio": 1.306,
-    #         "count": 0,
-    #     },
-    #     "10 C": {
-    #         "value": 10,
-    #         "radius": 19.75,
-    #         "ratio": 1.214,
-    #         "count": 0,
-    #     },
-    #     "20 C": {
-    #         "value": 20,
-    #         "radius": 22.25,
-    #         "ratio": 1.368,
-    #         "count": 0,
-    #     },
-    #     "50 C": {
-    #         "value": 50,
-    #         "radius": 24.25,
-    #         "ratio": 1.491,
-    #         "count": 0,
-    #     },
-    #     "1 E": {
-    #         "value": 100,
-    #         "radius": 23.25,
-    #         "ratio": 1.429,
-    #         "count": 0,
-    #     },
-    #     "2 E": {
-    #         "value": 200,
-    #         "radius": 25.75,
-    #         "ratio": 1.583,
-    #         "count": 0,
-    #     },
-    # }
     monedas = {
         "1 C": {
             "value": 1,
-            "radius": 16.3,
+            "radius": 16.26,
             "ratio": 1,
             "count": 0,
         },
         "2 C": {
             "value": 2,
-            "radius": 18.8,
+            "radius": 18.75,
             "ratio": 1.153,
             "count": 0,
         },
         "5 C": {
             "value": 5,
-            "radius": 21.35,
-            "ratio": 1.309,
+            "radius": 21.25,
+            "ratio": 1.306,
             "count": 0,
         },
         "10 C": {
             "value": 10,
-            "radius": 19.8,
+            "radius": 19.75,
             "ratio": 1.214,
             "count": 0,
         },
         "20 C": {
             "value": 20,
-            "radius": 22.3,
+            "radius": 22.25,
             "ratio": 1.368,
             "count": 0,
         },
         "50 C": {
             "value": 50,
-            "radius": 24.3,
-            "ratio": 1.490,
+            "radius": 24.25,
+            "ratio": 1.491,
             "count": 0,
         },
         "1 E": {
             "value": 100,
-            "radius": 23.3,
+            "radius": 23.25,
             "ratio": 1.429,
             "count": 0,
         },
         "2 E": {
             "value": 200,
-            "radius": 25.8,
+            "radius": 25.75,
             "ratio": 1.583,
             "count": 0,
         },
