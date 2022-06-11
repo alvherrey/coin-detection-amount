@@ -8,6 +8,11 @@ services:
       dockerfile: Dockerfile
     environment:
       - TZ=Europe/Madrid
+      - MIN_COIN_RADIO=10
+      - MAX_COIN_RADIO=400
+      - MIN_COIN_DISTANCE=100
+      - HOUGH_PARAM_1=100
+      - HOUGH_PARAM_2=50
     restart: unless-stopped
     ports:
       - 8002:8002
