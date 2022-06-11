@@ -1,13 +1,16 @@
-import os
+import base64
 import cv2
 import numpy as np
-import base64
+import os
 
 def detect_coins(input_img):
 
-    # defining minimal and maximal radius, specified to the coins.jpg
-    min_r = os.getenv('MIN_COIN_RADIO')
-    max_r = os.getenv('MAX_COIN_RADIO')
+    # defining hough params from os env variable
+    min_coin_radio = int(os.getenv('MIN_COIN_RADIO'))
+    max_coin_radio = int(os.getenv('MAX_COIN_RADIO'))
+    min_coin_distance = int(os.getenv('MIN_COIN_DISTANCE'))
+    hough_param_1 = int(os.getenv('HOUGH_PARAM_1'))
+    hough_param_2 = int(os.getenv('HOUGH_PARAM_2'))
 
     # preprocessing the input image
     cv2.imwrite("euro.jpg", input_img)
@@ -19,11 +22,11 @@ def detect_coins(input_img):
         img,                                # source image
         cv2.HOUGH_GRADIENT,                 # type of detection
         1,                                  # always 1
-        os.getenv('MIN_COIN_DISTANCE'),     # min distance between centers
-        param1=os.getenv('HOUGH_PARAM_1'),  # adjust param 1
-        param2=os.getenv('HOUGH_PARAM_2'),  # adjust param 2
-        minRadius=min_r,                    # minimal radius
-        maxRadius=max_r,                    # max radius
+        min_coin_distance,                  # min distance between centers
+        param1=hough_param_1,               # adjust param 1
+        param2=hough_param_2,               # adjust param 2
+        minRadius=min_coin_radio,           # minimal radius
+        maxRadius=max_coin_radio,           # max radius
     )
     if circles is None:
         print('es nulo')
@@ -51,53 +54,56 @@ def calculate_amount(input_img):
 
     # monedas initial map
     monedas = {
-        "1 C": {
-            "value": 1,
-            "radius": 16.26,
-            "ratio": 1,
-            "count": 0,
-        },
-        "2 C": {
-            "value": 2,
-            "radius": 18.75,
-            "ratio": 1.153,
-            "count": 0,
-        },
-        "5 C": {
-            "value": 5,
-            "radius": 21.25,
-            "ratio": 1.306,
-            "count": 0,
-        },
-        "10 C": {
-            "value": 10,
-            "radius": 19.75,
-            "ratio": 1.214,
-            "count": 0,
-        },
-        "20 C": {
-            "value": 20,
-            "radius": 22.25,
-            "ratio": 1.368,
-            "count": 0,
-        },
-        "50 C": {
-            "value": 50,
-            "radius": 24.25,
-            "ratio": 1.491,
-            "count": 0,
-        },
-        "1 E": {
-            "value": 100,
-            "radius": 23.25,
-            "ratio": 1.429,
-            "count": 0,
-        },
-        "2 E": {
-            "value": 200,
-            "radius": 25.75,
-            "ratio": 1.583,
-            "count": 0,
+        "coins" : 
+            {
+                "1 C": {
+                "value": 1,
+                "radius": 16.26,
+                "ratio": 1,
+                "count": 0,
+            },
+            "2 C": {
+                "value": 2,
+                "radius": 18.75,
+                "ratio": 1.153,
+                "count": 0,
+            },
+            "5 C": {
+                "value": 5,
+                "radius": 21.25,
+                "ratio": 1.306,
+                "count": 0,
+            },
+            "10 C": {
+                "value": 10,
+                "radius": 19.75,
+                "ratio": 1.214,
+                "count": 0,
+            },
+            "20 C": {
+                "value": 20,
+                "radius": 22.25,
+                "ratio": 1.368,
+                "count": 0,
+            },
+            "50 C": {
+                "value": 50,
+                "radius": 24.25,
+                "ratio": 1.491,
+                "count": 0,
+            },
+            "1 E": {
+                "value": 100,
+                "radius": 23.25,
+                "ratio": 1.429,
+                "count": 0,
+            },
+            "2 E": {
+                "value": 200,
+                "radius": 25.75,
+                "ratio": 1.583,
+                "count": 0,
+            },
         },
     }
 
@@ -122,11 +128,11 @@ def calculate_amount(input_img):
         ratio_to_check = coin[2] / smallest
         coor_x = coin[0]
         coor_y = coin[1]
-        for moneda in monedas:
-            value = monedas[moneda]['value']
-            if abs(ratio_to_check - monedas[moneda]['ratio']) <= tolerance:
-                monedas[moneda]['count'] += 1
-                total_amount += monedas[moneda]['value']
+        for moneda in monedas['coins']:
+            value = monedas['coins'][moneda]['value']
+            if abs(ratio_to_check - monedas['coins'][moneda]['ratio']) <= tolerance:
+                monedas['coins'][moneda]['count'] += 1
+                total_amount += monedas['coins'][moneda]['value']
                 cv2.putText(coins_circled, 'valor: {}'.format(value), (int(coor_x) -60 , int(coor_y)+ 30), font, 1,
                             (0, 0, 255), 2)
 
